@@ -1,0 +1,8 @@
+# ignore files
+sepHARData_a/
+
+# ignore cache
+__pycache__/
+
+# ignore IDEA files
+.idea/
