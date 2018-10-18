@@ -1,7 +1,13 @@
-# DeepSense
-Tensorflow 1.1 implementation for the paper:
+# User-activity classification for paper "Discovering User-context in Indoor Space".
 
-Yao, Shuochao, et al. "Deepsense: A unified deep learning framework for time-series mobile sensing data processing." Proceedings of the 26th International Conference on World Wide Web. International World Wide Web Conferences Steering Committee, 2017.
-	
-## The preprocessed dataset of HHAR task
-https://www.dropbox.com/s/z7zpnwh2ndthd2n/sepHARData_a.tar.gz?dl=0
+We discover user-context in indoor space by combining activity and location context for user. 
+
+This code is forked from [yscacaca/DeepSense](https://github.com/yscacaca/DeepSense) and modified for user-activity classification purpose in our project. Also, you can see our app for [data collection](https://github.com/STEMLab/android_sensor_reader) and [data preprocessing](https://github.com/bolatuly/HHAR-Data-Process).
+
+Instructions:
+1. Set local paths to your preprocessed data.
+2. Run ``` deepSense_HHAR_tf.py ``` to classify user actions. 
+
+Requirements for python version and tensorflow can be found in main repository of [DeepSense](https://github.com/yscacaca/DeepSense). 
+
+
