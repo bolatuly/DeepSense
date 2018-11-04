@@ -1,5 +1,7 @@
 # ignore files
 sepHARData_a/
+processed/
+result/
 
 # ignore cache
 __pycache__/

@@ -22,9 +22,9 @@ WIDE = 20
 CONV_KEEP_PROB = 0.8
 
 BATCH_SIZE = 64
-TOTAL_ITER_NUM = 0
+TOTAL_ITER_NUM = 10000
 
-DATA_NUM = 1120
+DATA_NUM = 4982
 
 
 # TRAIN_SIZE = metaDict[select][0]
@@ -209,7 +209,7 @@ def input_memory(file_list):
     features = []
     labels = []
     for file_path in file_list:
-        csvfile = open(file_path, newline='')
+        csvfile = open(file_path)
         reader = csv.reader(csvfile, quoting=csv.QUOTE_NONNUMERIC)
 
         for index, row in enumerate(reader):
@@ -228,19 +228,27 @@ def input_memory(file_list):
 train_file_list = []
 test_file_list = []
 
+file_list = []
 for i in range(DATA_NUM):
-    train_file_list.append("hhar_data/data_" + str(i) + ".csv")
+    file_list.append("processed/data_" + str(i) + ".csv")
 
-result_filename = "result/result.csv"
-results_csv = open(result_filename, newline='')
-result_reader = csv.reader(results_csv)
+random.shuffle(file_list)
+train_file_list = file_list[:3986]
+test_file_list = file_list[3986:]
 
-next(result_reader, None)
-for idx, row in enumerate(result_reader):
-    test_file_list.append(row[0])
-    train_file_list.remove(row[0])
-
-results_csv.close()
+# for i in range(DATA_NUM):
+#     train_file_list.append("processed/data_" + str(i) + ".csv")
+#
+# result_filename = "result/result.csv"
+# results_csv = open(result_filename)
+# result_reader = csv.reader(results_csv)
+#
+# next(result_reader, None)
+# for idx, row in enumerate(result_reader):
+#     test_file_list.append(row[0])
+#     train_file_list.remove(row[0])
+#
+# results_csv.close()
 
 global_step = tf.Variable(0, trainable=False)
 
@@ -287,19 +295,19 @@ with tf.Session() as sess:
     coord = tf.train.Coordinator()
     threads = tf.train.start_queue_runners(coord=coord)
 
-    print("RESTORE VARIABLE")
-    saver.restore(sess, "tmp/model.ckpt")
+    print("START")
+    #saver.restore(sess, "tmp/model.ckpt")
 
     TEST_epoch = int(len(test_file_list) / BATCH_SIZE) + 1
 
     process_file = open("process.csv", "a")
     process_writer = csv.writer(process_file)
     for iteration in range(TOTAL_ITER_NUM):
-        print(iteration)
+
 
         batch_x, batch_y = sess.run([batch_feature, batch_label])
         train_acc, opt = sess.run([train_accuracy, discOptimizer], feed_dict={X: batch_x, Y: batch_y})
-
+        print("iteration "+ str(iteration) + ":" + str(train_acc))
     process_file.close()
 
     # _predict, test_acc = sess.run([eval_predict, eval_accuracy], feed_dict={X: eval_feature, Y: eval_label})
@@ -315,6 +323,7 @@ with tf.Session() as sess:
         label_arr.extend(np.argmax(non_batch_y, axis=1))
         predict_arr.extend(_predict)
         acc.append(test_acc)
+        print("test " + str(eval_idx) + ":" + str(test_acc))
     test_acc = np.mean(acc)
 
     for idx, row in enumerate(test_file_list):
@@ -322,13 +331,13 @@ with tf.Session() as sess:
 
     print("FINAL TEST ACCURACY : ", test_acc)
 
-    os.makedirs(os.path.dirname(result_filename), exist_ok=True)
-    result_file = open(result_filename, 'w', encoding='utf-8', newline='')
-    result_writer = csv.writer(result_file)
-    result_writer.writerow([test_acc])
-    result_writer.writerows(rows)
+    #os.makedirs(os.path.dirname(result_filename), exist_ok=True)
+    #result_file = open(result_filename, 'w', encoding='utf-8', newline='')
+    #result_writer = csv.writer(result_file)
+    #result_writer.writerow([test_acc])
+    #result_writer.writerows(rows)
 
-    # save_path = saver.save(sess, "tmp/model.ckpt")
+    save_path = saver.save(sess, "tmp/model.ckpt")
 
     coord.request_stop()
     coord.join(threads)
