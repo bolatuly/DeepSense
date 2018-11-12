@@ -17,14 +17,14 @@ CONV_MERGE_LEN2 = 6
 CONV_MERGE_LEN3 = 4
 CONV_NUM2 = 64
 INTER_DIM = 120
-OUT_DIM = 4  # len(idDict)
+OUT_DIM = 3  # len(idDict)
 WIDE = 20
 CONV_KEEP_PROB = 0.8
 
 BATCH_SIZE = 64
-TOTAL_ITER_NUM = 10000
+TOTAL_ITER_NUM = 1000
 
-DATA_NUM = 4982
+DATA_NUM = 5670
 
 
 # TRAIN_SIZE = metaDict[select][0]
@@ -230,11 +230,11 @@ test_file_list = []
 
 file_list = []
 for i in range(DATA_NUM):
-    file_list.append("processed/data_" + str(i) + ".csv")
+    file_list.append("/Users/azamatbolat/Desktop/simulation/processed/data_" + str(i) + ".csv")
 
 random.shuffle(file_list)
-train_file_list = file_list[:3986]
-test_file_list = file_list[3986:]
+train_file_list = file_list[:4536]
+test_file_list = file_list[4536:]
 
 # for i in range(DATA_NUM):
 #     train_file_list.append("processed/data_" + str(i) + ".csv")
